@@ -1,10 +1,21 @@
 <?php
 
-class Database {
+class Database
+{
   private PDO $pdo;
 
-  public function __construct($pdo)
-  {
-    $this->pdo = $pdo;
+  public function __construct(
+    string $host,
+    string $db_name,
+    string $db_username,
+    string $db_password
+  ) {
+    try {
+      $this->pdo = new PDO("mysql:host=$host;dbname=$db_name;charset=utf8", $db_username, $db_password);
+
+      $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    } catch (PDOException $e) {
+      throw new Exception("Could not connect to the database:" . $e->getMessage());
+    }
   }
 }
