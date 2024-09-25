@@ -18,4 +18,12 @@ class Database
       throw new Exception("Could not connect to the database:" . $e->getMessage());
     }
   }
+
+  public function query(string $sql, array $params = []): array {
+    $pdo_statement = $this->pdo->prepare($sql);
+
+    $pdo_statement->execute($params);
+
+    return $pdo_statement->fetchAll(PDO::FETCH_ASSOC);
+  }
 }
