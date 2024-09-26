@@ -19,17 +19,20 @@
     <section class="reports">
       <div class="report reports__report">
         <h2 class="title">Nadpłaty</h2>
+
         <form method="GET" action="">
           <div class="search-options">
             <label for="sort_overpayments">
               Sortuj według:
             </label>
+
             <select id="sort_overpayments" name="sort_overpayments">
               <option
                 <?php selectIfCurrent(SortBy::$overpayments, 'company_name') ?>
                 value="company_name">
                 Nazwa firmy
               </option>
+
               <option
                 value="overpayment_amount"
                 <?php selectIfCurrent(SortBy::$overpayments, 'overpayment_amount') ?>>
@@ -37,14 +40,17 @@
               </option>
             </select>
           </div>
+
           <div class="search-options">
             <label for="order_overpayments">Kolejność:</label>
+
             <select id="order_overpayments" name="order_overpayments">
               <option
                 <?php selectIfCurrent(OrderColumn::$overpayments, SortOrder::$asc) ?>
                 value="ASC">
                 Rosnąco
               </option>
+
               <option
                 <?php selectIfCurrent(OrderColumn::$overpayments, SortOrder::$desc) ?>
                 value="DESC">
@@ -58,15 +64,18 @@
 
       <div class="report reports__report">
         <h2 class="title">Niedopłaty</h2>
+
         <form method="GET" action="">
           <div class="search-options">
             <label for="sort_underpayments">Sortuj według:</label>
+
             <select name="sort_underpayments">
               <option
                 value="company_name"
                 <?php selectIfCurrent(SortBy::$underpayments, "company_name") ?>>
                 Nazwa firmy
               </option>
+
               <option
                 value="outstanding_amount"
                 <?php selectIfCurrent(SortBy::$underpayments, "outstanding_amount") ?>>
@@ -74,14 +83,17 @@
               </option>
             </select>
           </div>
+
           <div class="search-options">
             <label for="order_underpayments">Kolejność:</label>
+
             <select name="order_underpayments">
               <option
                 value="ASC"
                 <?php selectIfCurrent(OrderColumn::$underpayments, SortOrder::$asc) ?>>
                 Rosnąco
               </option>
+
               <option
                 value="DESC"
                 <?php selectIfCurrent(OrderColumn::$underpayments, SortOrder::$desc) ?>>
@@ -89,17 +101,24 @@
               </option>
             </select>
           </div>
-          <label for="filter_company">Filtruj po nazwie firmy:</label>
-          <input type="text" name="filter_company" />
+
+          <div class="search-options">
+            <label for="filter_company">Filtruj po nazwie firmy:</label>
+
+            <input type="text" name="filter_company" />
+          </div>
+
           <button type="submit" name="report" value="underpayments">Wyświetl</button>
         </form>
       </div>
 
       <div class="report reports__report">
         <h2 class="title">Nierozliczone faktury po terminie</h2>
+
         <form method="GET" action="">
           <div class="search-options">
             <label for="sort_overdue">Sortuj według:</label>
+
             <select name="sort_overdue">
               <option
                 value="company_name"
@@ -113,14 +132,17 @@
               </option>
             </select>
           </div>
+
           <div class="search-options">
             <label for="order_overdue">Kolejność:</label>
+
             <select name="order_overdue">
               <option
                 value="ASC"
                 <?php selectIfCurrent(OrderColumn::$overdue, SortOrder::$asc) ?>>
                 Rosnąco
               </option>
+
               <option
                 value="DESC"
                 <?php selectIfCurrent(OrderColumn::$overdue, SortOrder::$desc) ?>>
@@ -128,6 +150,7 @@
               </option>
             </select>
           </div>
+
           <button type="submit" name="report" value="overdue">Wyświetl</button>
         </form>
       </div>
