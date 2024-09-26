@@ -135,7 +135,7 @@
 
     <?php echo isset($_GET['report']) ? '' : '</main>' ?>
 
-  <hr>
+  <hr class="main__section-divider">
 
   <?php
   require 'Database.php';

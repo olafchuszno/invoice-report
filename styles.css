@@ -1,10 +1,17 @@
 body {
-  padding-bottom: 48px;
   font-family: Roboto;
 }
 
 .main {
-  padding: 48px 32px 0;
+  padding: 0 32px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 36px;
+}
+
+.main__section-divider {
+  width: 100%;
 }
 
 .title {
@@ -15,7 +22,7 @@ body {
 .reports {
   display: flex;
   justify-content: space-evenly;
-  padding-bottom: 24px;
+  gap: 64px;
 }
 
 .report-results {
