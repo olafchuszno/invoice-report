@@ -175,7 +175,21 @@
             <span>{$row['outstanding_amount']}</span>
             <span>(numer faktury: {$row['invoice_number']})</span>
             </div>";
-          }
+          };
+
+          break;
+        
+          case 'overdue':
+            $sortBy = $_GET['sort_overdue'] ?? 'due_date';
+            $order = $_GET['order_overdue'] ?? 'ASC';
+
+            $data = $report->getOverdueInvoices($sortBy, $order);
+    
+            foreach ($data as $row) {
+              echo "Firma: {$row['company_name']}, Termin płatności: {$row['due_date']}, Niedopłata: {$row['outstanding_amount']}<br>";
+            }
+    
+            break;
       }
     }
   ?>
