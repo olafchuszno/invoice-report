@@ -125,6 +125,42 @@
 
     <button type="submit" name="report" value="overdue">Wyświetl</button>
   </form>
+
+  <hr>
+
+  <?php
+    require './Database.php';
+    require './Report.php';
+
+    $db = new Database('db', 'report', 'root', 'dbpass');
+    $report = new Report($db);
+
+    if (isset($_GET['report'])) {
+      $report_type = $_GET['report'];
+      $DEFAULT_ORDER = 'ASC';
+
+      switch($report_type) {
+        case 'overpayments':
+          $sortBy = $_GET['sort_overpayments'] === 'overpayment_amount'
+            ? 'overpayment_amount'
+            : 'company_name';
+
+          if ($_GET['order_overpayments'] === 'DESC') {
+            $order = 'DESC';
+          }
+
+          $rows = $report->getOverpayments($sortBy, isset($order) ? $order : $DEFAULT_ORDER);
+          break;
+      }
+    }
+
+    foreach ($rows as $row) {
+      echo "<div>
+      <span>{$row['company_name']}</span>
+      <span>{$row['overpayment_amount']}</span>
+      </div>";
+    }
+  ?>
 </body>
 
 </html>
