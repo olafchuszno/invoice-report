@@ -18,7 +18,7 @@
 
     <section class="reports">
       <div class="report reports__report">
-        <h2>Nadpłaty</h2>
+        <h2 class="title">Nadpłaty</h2>
         <form method="GET" action="">
           <div class="search-options">
             <label for="sort_overpayments">
@@ -57,7 +57,7 @@
       </div>
 
       <div class="report reports__report">
-        <h2>Niedopłaty</h2>
+        <h2 class="title">Niedopłaty</h2>
         <form method="GET" action="">
           <div class="search-options">
             <label for="sort_underpayments">Sortuj według:</label>
@@ -96,7 +96,7 @@
       </div>
 
       <div class="report reports__report">
-        <h2>Nierozliczone faktury po terminie</h2>
+        <h2 class="title">Nierozliczone faktury po terminie</h2>
         <form method="GET" action="">
           <div class="search-options">
             <label for="sort_overdue">Sortuj według:</label>
@@ -185,7 +185,7 @@
 
         echo "
         <section class='report-results main__section-results'>
-          <h3>Raport nadpłat</h3>
+          <h3 class='title'>Raport nadpłat</h3>
           <ul>
         ";
 
@@ -207,7 +207,7 @@
 
         echo "
         <section class='report-results main__section-results'>
-          <h3>Raport niedopłat</h3>
+          <h3 class='title'>Raport niedopłat</h3>
           <ul>
         ";
 
@@ -228,7 +228,7 @@
 
         echo "
         <section class='report-results main__section-results'>
-          <h3>Raport nierozliczonych faktur</h3>
+          <h3 class='title'>Raport nierozliczonych faktur</h3>
           <ul>
         ";
 
