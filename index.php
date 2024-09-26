@@ -217,7 +217,9 @@
       case 'overpayments':
         $sortBy = $_GET[SortBy::$overpayments] ?? DefaultSortingColumn::$overpayments;
         $order = $_GET[OrderColumn::$overpayments] ?? SortOrder::$asc;
-        $data = $report->getOverpayments($sortBy, $order);
+        $filterCompany = $_GET['filter_company'] ?? '';
+
+        $data = $report->getOverpayments($sortBy, $order, $filterCompany);
 
         echo "
         <section class='report-results main__section-results'>
@@ -239,6 +241,7 @@
         $sortBy = $_GET[SortBy::$overpayments] ?? DefaultSortingColumn::$underpayments;
         $order = $_GET[OrderColumn::$underpayments] ?? SortOrder::$asc;
         $filterCompany = $_GET['filter_company'] ?? '';
+
         $data = $report->getUnderpayments($sortBy, $order, $filterCompany);
 
         echo "

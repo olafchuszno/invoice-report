@@ -9,7 +9,7 @@ class Report {
         $this->db = $db;
     }
 
-    public function getOverpayments(string $sortBy = 'amount', string $order = 'ASC'): array {
+    public function getOverpayments(string $sortBy = 'amount', string $order = 'ASC', string $filterCompany = ''): array {
         $validSortColumns = ['company_name', 'amount'];
 
         if (!in_array($sortBy, $validSortColumns)) {
@@ -21,13 +21,22 @@ class Report {
         }
 
         $sql = "SELECT o.overpayment_amount, c.company_name
-        FROM overpayments o
-        JOIN customers c
-        ON o.customer_id = c.id
-        ORDER BY $sortBy $order        
+          FROM overpayments o
+          JOIN customers c
+          ON o.customer_id = c.id
         ";
 
-        return $this->db->query($sql);
+        $queryParams = [];
+
+        if ($filterCompany) {
+          $sql.= " HAVING c.company_name LIKE :filterCompany";
+
+          $queryParams['filterCompany'] = "%$filterCompany%";
+        }
+
+        $sql.=" ORDER BY $sortBy $order";
+
+        return $this->db->query($sql, $queryParams);
     }
 
     public function getUnderpayments(string $sortBy = 'outstanding_amount', string $order = 'ASC', string $filterCompany = ''): array {
@@ -44,18 +53,15 @@ class Report {
                 GROUP BY i.id, c.company_name
                 HAVING outstanding_amount > 0";
 
+        $queryParams = [];
         if ($filterCompany) {
             $sql .= " AND c.company_name LIKE :filterCompany";
+            $queryParams['filterCompany'] = "%$filterCompany%";
         }
 
         $sql .= " ORDER BY $sortBy $order";
 
-        $params = [];
-        if ($filterCompany) {
-          $params['filterCompany'] = "%$filterCompany%";
-        }
-
-        return $this->db->query($sql, $params);
+        return $this->db->query($sql, $queryParams);
     }
 
     public function getOverdueInvoices(string $sortBy = 'due_date', string $order = 'ASC', string $filterCompany = ''): array {
@@ -72,16 +78,16 @@ class Report {
         GROUP BY i.id, c.company_name, i.due_date, i.total_amount
         HAVING i.due_date < NOW() AND outstanding_amount > 0";
 
-        $params = [];
+        $queryParams = [];
 
         if ($filterCompany) {
           $sql.=" AND c.company_name LIKE :filterCompany";
 
-          $params['filterCompany'] = "%$filterCompany%";
+          $queryParams['filterCompany'] = "%$filterCompany%";
         }
 
         $sql.=" ORDER BY $sortBy $order";
 
-        return $this->db->query($sql, $params);
+        return $this->db->query($sql, $queryParams);
     }
 }
