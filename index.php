@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pl">
 
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
+  <title>Raporty</title>
 </head>
 
 <body>
@@ -20,34 +20,37 @@
 
       <select id="sort_overpayments" name="sort_overpayments">
         <option
-          value="company_name">
+          <?php selectIfCurrent(SortBy::$overpayments, 'company_name') ?>
+          value="company_name"
+        >
           Nazwa firmy
         </option>
 
-        <option
+        <option 
           value="overpayment_amount"
-          >
+          <?php selectIfCurrent(SortBy::$overpayments, 'overpayment_amount') ?>
+        >
           Kwota nadpłaty
         </option>
       </select>
     </div>
 
     <div class="">
-      <label for="order_overpayments">
-        Kolejność:
-      </label>
+      <label for="order_overpayments">Kolejność:</label>
 
       <select id="order_overpayments" name="order_overpayments">
         <option
-
-          value="ASC">
+          <?php selectIfCurrent(OrderColumn::$overpayments, SortOrder::$asc) ?>
+        value="ASC"
+        >
           Rosnąco
 
         </option>
 
         <option
-
-          value="DESC">
+        <?php selectIfCurrent(OrderColumn::$overpayments, SortOrder::$desc) ?>
+        value="DESC"
+        >
           Malejąco
 
         </option>
@@ -61,27 +64,35 @@
 
   <form method="GET" action="">
     <label for="sort_underpayments">Sortuj według:</label>
-    <select id="sort_underpayments" name="sort_underpayments">
+    <select name="sort_underpayments">
       <option
-        value="company_name">
+        value="company_name"
+        <?php selectIfCurrent(SortBy::$underpayments, "company_name") ?>
+      >
         Nazwa firmy
       </option>
 
       <option
-        value="outstanding_amount">
+        value="outstanding_amount"
+        <?php selectIfCurrent(SortBy::$underpayments, "outstanding_amount") ?>
+      >
         Kwota niedopłaty
       </option>
     </select>
 
     <label for="order_underpayments">Kolejność:</label>
-    <select id="order_underpayments" name="order_underpayments">
+    <select name="order_underpayments">
       <option
-        value="ASC">
+        value="ASC"
+        <?php selectIfCurrent(OrderColumn::$underpayments, SortOrder::$asc) ?>
+      >
         Rosnąco
       </option>
 
       <option
-        value="DESC">
+        value="DESC"
+        <?php selectIfCurrent(OrderColumn::$underpayments, SortOrder::$desc) ?>
+      >
         Malejąco
       </option>
     </select>
@@ -96,28 +107,35 @@
 
   <form method="GET" action="">
     <label for="sort_overdue">Sortuj według:</label>
-    <select id="sort_overdue" name="sort_overdue">
+    <select name="sort_overdue">
       <option
-        value="company_name">
+        value="company_name"
+        <?php selectIfCurrent(SortBy::$overdue, "company_name") ?>
+      >
         Nazwa firmy
       </option>
 
       <option
-
-        value="due_date">
+        <?php selectIfCurrent(SortBy::$overdue, "due_date") ?>
+        value="due_date"
+      >
         Termin płatności
       </option>
     </select>
 
     <label for="order_overdue">Kolejność:</label>
-    <select id="order_overdue" name="order_overdue">
+    <select name="order_overdue">
       <option
-        value="ASC">
+        value="ASC"
+        <?php selectIfCurrent(OrderColumn::$overdue, SortOrder::$asc) ?>
+      >
         Rosnąco
       </option>
 
       <option
-        value="DESC">
+        value="DESC"
+        <?php selectIfCurrent(OrderColumn::$overdue, SortOrder::$desc) ?>
+      >
         Malejąco
       </option>
     </select>
@@ -129,70 +147,89 @@
   <hr>
 
   <?php
-    require './Database.php';
-    require './Report.php';
+  require 'Database.php';
+  require 'Report.php';
 
-    $db = new Database('db', 'report', 'root', 'dbpass');
-    $report = new Report($db);
+  // Initialize report and db
+  $db_password = 'dbpass';
+  $db = new Database('db', 'report', 'root', $db_password);
+  $report = new Report($db);
 
-    if (isset($_GET['report'])) {
-      $report_type = $_GET['report'];
-      $DEFAULT_ORDER = 'ASC';
+  class SortOrder {
+    public static $asc = 'ASC';
+    public static $desc = 'DESC';
+  }
 
-      switch($report_type) {
-        case 'overpayments':
-          $sortBy = $_GET['sort_overpayments'] === 'overpayment_amount'
-            ? 'overpayment_amount'
-            : 'company_name';
+  class SortBy {
+    public static $overpayments = 'sort_overpayments';
+    public static $underpayments = 'sort_underpayments';
+    public static $overdue = 'sort_overdue';
+  }
 
-          if ($_GET['order_overpayments'] === 'DESC') {
-            $order = 'DESC';
-          }
+  class OrderColumn {
+    public static $overpayments = 'order_overpayments';
+    public static $underpayments = 'order_underpayments';
+    public static $overdue = 'order_overdue';
+  }
 
-          $rows = $report->getOverpayments($sortBy, isset($order) ? $order : $DEFAULT_ORDER);
+  class DefaultSortingColumn {
+    public static $overpayments = 'overpayment_amount';
+    public static $underpayments = 'outstanding_amount';
+    public static $overdue = 'due_date';
+  }
 
-          foreach ($rows as $row) {
-            echo "<div>
-            <span>{$row['company_name']}</span>
-            <span>{$row['overpayment_amount']}</span>
-            </div>";
-          }
+  if (isset($_GET['report'])) {
+    // Currently displayed reports: overpayments / underpayments / overdue
+    $reportType = $_GET['report'];
 
-          break;
+    switch ($reportType) {
+      case 'overpayments':
+        $sortBy = $_GET[SortBy::$overpayments] ?? DefaultSortingColumn::$overpayments;
+        $order = $_GET[OrderColumn::$overpayments] ?? SortOrder::$asc;
+        $data = $report->getOverpayments($sortBy, $order);
+        echo '<h3>Raport nadpłat</h3>';
 
-        case 'underpayments':
-          $sortBy = $_GET['sort_underpayments'] === 'underpayment_amount'
-            ? 'underpayment_amount'
-            : 'company_name';
+        foreach ($data as $row) {
+          echo "Firma: {$row['company_name']}, Kwota nadpłaty: {$row['overpayment_amount']}<br>";
+        }
+        break;
 
-          $order = $_GET['order_underpayments'] === 'DESC' ? 'DESC' : $DEFAULT_ORDER;
+      case 'underpayments':
+        $sortBy = $_GET[SortBy::$overpayments] ?? DefaultSortingColumn::$underpayments;
+        $order = $_GET[OrderColumn::$underpayments] ?? SortOrder::$asc;
+        $filterCompany = $_GET['filter_company'] ?? '';
+        $data = $report->getUnderpayments($sortBy, $order, $filterCompany);
 
-          $rows = $report->getUnderpayments($sortBy, $order);
-          
-          foreach ($rows as $row) {
-            echo "<div>
-            <span>{$row['company_name']}:</span>
-            <span>{$row['outstanding_amount']}</span>
-            <span>(numer faktury: {$row['invoice_number']})</span>
-            </div>";
-          };
+        echo '<h3>Raport niedopłat</h3>';
 
-          break;
-        
-          case 'overdue':
-            $sortBy = $_GET['sort_overdue'] ?? 'due_date';
-            $order = $_GET['order_overdue'] ?? 'ASC';
+        foreach ($data as $row) {
+          echo "Firma: {$row['company_name']}, Kwota niedopłaty: {$row['outstanding_amount']}<br>";
+        }
+        break;
 
-            $data = $report->getOverdueInvoices($sortBy, $order);
-    
-            foreach ($data as $row) {
-              echo "Firma: {$row['company_name']}, Termin płatności: {$row['due_date']}, Niedopłata: {$row['outstanding_amount']}<br>";
-            }
-    
-            break;
-      }
+      case 'overdue':
+        $sortBy = $_GET[SortBy::$overdue] ?? DefaultSortingColumn::$overdue;
+        $order = $_GET[OrderColumn::$overdue] ?? SortOrder::$asc;
+        $data = $report->getOverdueInvoices($sortBy, $order);
+
+        echo '<h3>Raport nierozliczonych faktur</h3>';
+
+        foreach ($data as $row) {
+          echo "Firma: {$row['company_name']}, Termin płatności: {$row['due_date']}, Niedopłata: {$row['outstanding_amount']}<br>";
+        }
+
+        break;
     }
+  }
+
+  function selectIfCurrent(string $currentUrlColumn, string $optionValue) {
+    if (isset($_GET[$currentUrlColumn]) && $_GET[$currentUrlColumn] === $optionValue) {
+      echo 'selected';
+    }
+  }
+
   ?>
+
 </body>
 
 </html>
