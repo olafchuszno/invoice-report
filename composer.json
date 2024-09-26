@@ -1,0 +1,10 @@
+{
+    "name": "seiz/invoice-report",
+    "authors": [
+        {
+            "name": "Olaf",
+            "email": "olaf.chuszno@gmail.com"
+        }
+    ],
+    "require": {}
+}
