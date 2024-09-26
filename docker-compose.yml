@@ -1,0 +1,36 @@
+version: '3.8'
+
+services:
+  app:
+    image: php:8.2-apache
+    container_name: php_app
+    volumes:
+      - ./:/var/www/html
+    ports:
+      - "8080:80"
+    depends_on:
+      - db
+    networks:
+      - app-network
+    build:
+      context: .
+      dockerfile: Dockerfile
+
+  db:
+    image: mysql:8.0
+    container_name: mysql_db
+    environment:
+      MYSQL_ROOT_PASSWORD: "dbpass"
+      MYSQL_DATABASE: report
+    volumes:
+      - db_data:/var/lib/mysql
+    ports:
+      - "3306:3306"
+    networks:
+      - app-network
+
+volumes:
+  db_data:
+
+networks:
+  app-network:
