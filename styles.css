@@ -26,6 +26,39 @@ body {
   gap: 64px;
 }
 
+.search-form {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.button {
+  cursor: pointer;
+  border: none;
+  border-radius: 6px;
+  font-size: 16px;
+}
+
+.search-form__button {
+  background-color: rgb(201, 201, 201);
+  width: min-content;
+  padding: 3px 12px;
+  transition: all 0.2s ease;
+}
+
+.search-form__button:hover {
+  transition: all 0.2s ease;
+  -webkit-box-shadow: 0px 2px 5px 3px rgba(151, 151, 151, 0.75);
+  -moz-box-shadow: 0px 2px 5px 3px rgba(181, 181, 181, 0.75);
+  box-shadow: 0px 2px 5px 3px rgba(190, 190, 190, 0.75);
+}
+
+.report {
+  display: flex;
+  flex-direction: column;
+  gap: 8px
+}
+
 .report-results {
   display: flex;
   align-items: center;

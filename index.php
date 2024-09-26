@@ -18,9 +18,9 @@
 
     <section class="reports">
       <div class="report reports__report">
-        <h2 class="title">Nadpłaty</h2>
+        <h2 class="title report__title">Nadpłaty</h2>
 
-        <form method="GET" action="">
+        <form class="search-form" method="GET" action="">
           <div class="search-options">
             <label for="sort_overpayments">
               Sortuj według:
@@ -58,14 +58,15 @@
               </option>
             </select>
           </div>
-          <button type="submit" name="report" value="overpayments">Wyświetl</button>
+
+          <button class="button search-form__button" type="submit" name="report" value="overpayments">Wyświetl</button>
         </form>
       </div>
 
       <div class="report reports__report">
-        <h2 class="title">Niedopłaty</h2>
+        <h2 class="title report__title">Niedopłaty</h2>
 
-        <form method="GET" action="">
+        <form class="search-form" method="GET" action="">
           <div class="search-options">
             <label for="sort_underpayments">Sortuj według:</label>
 
@@ -108,14 +109,14 @@
             <input type="text" name="filter_company" />
           </div>
 
-          <button type="submit" name="report" value="underpayments">Wyświetl</button>
+          <button class="button search-form__button" type="submit" name="report" value="underpayments">Wyświetl</button>
         </form>
       </div>
 
       <div class="report reports__report">
-        <h2 class="title">Nierozliczone faktury po terminie</h2>
+        <h2 class="title report__title">Nierozliczone faktury po terminie</h2>
 
-        <form method="GET" action="">
+        <form class="search-form" method="GET" action="">
           <div class="search-options">
             <label for="sort_overdue">Sortuj według:</label>
 
@@ -151,7 +152,7 @@
             </select>
           </div>
 
-          <button type="submit" name="report" value="overdue">Wyświetl</button>
+          <button class="button search-form__button" type="submit" name="report" value="overdue">Wyświetl</button>
         </form>
       </div>
     </section>
