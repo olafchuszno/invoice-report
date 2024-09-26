@@ -1,3 +1,21 @@
+.main {
+  padding: 48px 32px 0;
+  padding-top: 48px;
+}
+
 .title {
+  text-align: center;
   color: black;
+}
+
+.reports {
+  display: flex;
+  justify-content: space-evenly;
+  padding-bottom: 24px;
+}
+
+.report-results {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
 }
