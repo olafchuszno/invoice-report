@@ -17,4 +17,15 @@ class Report {
       ORDER BY $sortBy $order
     ");
   }
+
+  function getUnderpayments($sortBy, $order): array {
+    $sql = "SELECT i.invoice_number, c.company_name, i.total_amount - IFNULL(SUM(p.payment_amount), 0) as outstanding_amount
+      FROM invoices i
+      JOIN customers c ON i.customer_id = c.id
+      LEFT JOIN payments p on i.id = p.invoice_id
+      GROUP BY i.id, c.company_name
+      HAVING outstanding_amount > 0
+    ";
+    return $this->db->query($sql);
+  }
 }
