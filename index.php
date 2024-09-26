@@ -238,7 +238,7 @@
         break;
 
       case 'underpayments':
-        $sortBy = $_GET[SortBy::$overpayments] ?? DefaultSortingColumn::$underpayments;
+        $sortBy = $_GET[SortBy::$underpayments] ?? DefaultSortingColumn::$underpayments;
         $order = $_GET[OrderColumn::$underpayments] ?? SortOrder::$asc;
         $filterCompany = $_GET['filter_company'] ?? '';
 

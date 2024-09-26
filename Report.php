@@ -9,7 +9,11 @@ class Report {
         $this->db = $db;
     }
 
-    public function getOverpayments(string $sortBy = 'amount', string $order = 'ASC', string $filterCompany = ''): array {
+    public function getOverpayments(
+      string $sortBy = 'amount',
+      string $order = 'ASC',
+      string $filterCompany = ''
+    ): array {
         $validSortColumns = ['company_name', 'amount'];
 
         if (!in_array($sortBy, $validSortColumns)) {
@@ -39,55 +43,67 @@ class Report {
         return $this->db->query($sql, $queryParams);
     }
 
-    public function getUnderpayments(string $sortBy = 'outstanding_amount', string $order = 'ASC', string $filterCompany = ''): array {
-        $validSortColumns = ['company_name', 'outstanding_amount'];
+    public function getUnderpayments(
+      string $sortBy = 'outstanding_amount',
+      string $order = 'ASC',
+      string $filterCompany = ''
+    ): array {
+      $validSortColumns = ['company_name', 'outstanding_amount'];
 
-        if (!in_array($sortBy, $validSortColumns)) {
-            $sortBy = 'outstanding_amount';
-        }
+      if (!in_array($sortBy, $validSortColumns)) {
+          $sortBy = 'outstanding_amount';
+      }
 
-        $sql = "SELECT i.invoice_number, c.company_name, i.total_amount - IFNULL(SUM(p.payment_amount), 0) AS outstanding_amount
-                FROM invoices i
-                JOIN customers c ON i.customer_id = c.id
-                LEFT JOIN payments p ON i.id = p.invoice_id
-                GROUP BY i.id, c.company_name
-                HAVING outstanding_amount > 0";
+      $sql = "SELECT
+      i.invoice_number,
+      c.company_name,
+      i.total_amount - IFNULL(SUM(p.payment_amount), 0)AS outstanding_amount
+      FROM invoices i
+      JOIN customers c ON i.customer_id = c.id
+      LEFT JOIN payments p ON i.id = p.invoice_id
+      GROUP BY i.id, c.company_name
+      HAVING outstanding_amount > 0";
 
-        $queryParams = [];
-        if ($filterCompany) {
-            $sql .= " AND c.company_name LIKE :filterCompany";
-            $queryParams['filterCompany'] = "%$filterCompany%";
-        }
+      $queryParams = [];
 
-        $sql .= " ORDER BY $sortBy $order";
+      if ($filterCompany) {
+          $sql .= " AND c.company_name LIKE :filterCompany";
+          $queryParams['filterCompany'] = "%$filterCompany%";
+      }
 
-        return $this->db->query($sql, $queryParams);
+      $sql .= " ORDER BY $sortBy $order";
+
+      return $this->db->query($sql, $queryParams);
     }
 
-    public function getOverdueInvoices(string $sortBy = 'due_date', string $order = 'ASC', string $filterCompany = ''): array {
-        $validSortColumns = ['company_name', 'due_date'];
+    public function getOverdueInvoices(
+      string $sortBy = 'due_date',
+      string $order = 'ASC',
+      string $filterCompany = ''
+    ): array {
+      $validSortColumns = ['company_name', 'due_date'];
 
-        if (!in_array($sortBy, $validSortColumns)) {
-            $sortBy = 'due_date';
-        }
+      if (!in_array($sortBy, $validSortColumns)) {
+          $sortBy = 'due_date';
+      }
 
-        $sql = "SELECT i.invoice_number, c.company_name, i.due_date, i.total_amount - IFNULL(SUM(p.payment_amount), 0) AS outstanding_amount
-        FROM invoices i
-        JOIN customers c ON i.customer_id = c.id
-        LEFT JOIN payments p ON i.id = p.invoice_id
-        GROUP BY i.id, c.company_name, i.due_date, i.total_amount
-        HAVING i.due_date < NOW() AND outstanding_amount > 0";
+      $sql = "SELECT i.invoice_number, c.company_name, i.due_date, i.total_amount - IFNULL(SUM(p.payment_amount), 0) AS outstanding_amount
+      FROM invoices i
+      JOIN customers c ON i.customer_id = c.id
+      LEFT JOIN payments p ON i.id = p.invoice_id
+      GROUP BY i.id, c.company_name, i.due_date, i.total_amount
+      HAVING i.due_date < NOW() AND outstanding_amount > 0";
 
-        $queryParams = [];
+      $queryParams = [];
 
-        if ($filterCompany) {
-          $sql.=" AND c.company_name LIKE :filterCompany";
+      if ($filterCompany) {
+        $sql.=" AND c.company_name LIKE :filterCompany";
 
-          $queryParams['filterCompany'] = "%$filterCompany%";
-        }
+        $queryParams['filterCompany'] = "%$filterCompany%";
+      }
 
-        $sql.=" ORDER BY $sortBy $order";
+      $sql.=" ORDER BY $sortBy $order";
 
-        return $this->db->query($sql, $queryParams);
+      return $this->db->query($sql, $queryParams);
     }
 }
