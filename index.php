@@ -59,6 +59,12 @@
             </select>
           </div>
 
+          <div class="search-options">
+            <label for="filter_company">Filtruj po nazwie firmy:</label>
+
+            <input id=filter_company" type="text" name="filter_company" />
+          </div>
+
           <button class="button search-form__button" type="submit" name="report" value="overpayments">Wyświetl</button>
         </form>
       </div>
@@ -106,7 +112,7 @@
           <div class="search-options">
             <label for="filter_company">Filtruj po nazwie firmy:</label>
 
-            <input type="text" name="filter_company" />
+            <input id=filter_company" type="text" name="filter_company" />
           </div>
 
           <button class="button search-form__button" type="submit" name="report" value="underpayments">Wyświetl</button>
@@ -150,6 +156,12 @@
                 Malejąco
               </option>
             </select>
+          </div>
+
+          <div class="search-options">
+            <label for="filter_company">Filtruj po nazwie firmy:</label>
+
+            <input id=filter_company" type="text" name="filter_company" />
           </div>
 
           <button class="button search-form__button" type="submit" name="report" value="overdue">Wyświetl</button>
@@ -248,7 +260,9 @@
       case 'overdue':
         $sortBy = $_GET[SortBy::$overdue] ?? DefaultSortingColumn::$overdue;
         $order = $_GET[OrderColumn::$overdue] ?? SortOrder::$asc;
-        $data = $report->getOverdueInvoices($sortBy, $order);
+        $filterCompany = $_GET['filter_company'] ?? '';
+
+        $data = $report->getOverdueInvoices($sortBy, $order, $filterCompany);
 
         echo "
         <section class='report-results main__section-results'>
