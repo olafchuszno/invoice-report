@@ -150,15 +150,33 @@
           }
 
           $rows = $report->getOverpayments($sortBy, isset($order) ? $order : $DEFAULT_ORDER);
-          break;
-      }
-    }
 
-    foreach ($rows as $row) {
-      echo "<div>
-      <span>{$row['company_name']}</span>
-      <span>{$row['overpayment_amount']}</span>
-      </div>";
+          foreach ($rows as $row) {
+            echo "<div>
+            <span>{$row['company_name']}</span>
+            <span>{$row['overpayment_amount']}</span>
+            </div>";
+          }
+
+          break;
+
+        case 'underpayments':
+          $sortBy = $_GET['sort_underpayments'] === 'underpayment_amount'
+            ? 'underpayment_amount'
+            : 'company_name';
+
+          $order = $_GET['order_underpayments'] === 'DESC' ? 'DESC' : $DEFAULT_ORDER;
+
+          $rows = $report->getUnderpayments($sortBy, $order);
+          
+          foreach ($rows as $row) {
+            echo "<div>
+            <span>{$row['company_name']}:</span>
+            <span>{$row['outstanding_amount']}</span>
+            <span>(numer faktury: {$row['invoice_number']})</span>
+            </div>";
+          }
+      }
     }
   ?>
 </body>
